@@ -644,11 +644,18 @@ initialize_buildroot() {
 
     # base directory structure
     install -dm755 "$buildroot"/{new_root,proc,sys,dev,run,tmp,etc,usr/{local,lib,bin}}
-
+    ln -s "usr/lib" "$buildroot/lib"
+    ln -s "../lib"  "$buildroot/usr/local/lib"
+    ln -s "bin"     "$buildroot/usr/sbin"
+    ln -s "usr/bin" "$buildroot/bin"
+    ln -s "usr/bin" "$buildroot/sbin"
+    ln -s "../bin"  "$buildroot/usr/local/bin"
+    ln -s "../bin"  "$buildroot/usr/local/sbin"
 
     case $arch in
         x86_64)
-            ln -s "lib"     "$buildroot/lib64"
+            ln -s "lib"     "$buildroot/usr/lib64"
+            ln -s "usr/lib" "$buildroot/lib64"
             ;;
     esac
 
@@ -656,7 +663,7 @@ initialize_buildroot() {
     printf '%s' "$version" >"$buildroot/VERSION"
 
     # kernel module dir
-    [[ $kernver != none ]] && install -dm755 "$buildroot/lib/modules/$kernver/kernel"
+    [[ $kernver != none ]] && install -dm755 "$buildroot/usr/lib/modules/$kernver/kernel"
 
     # mount tables
     ln -s /proc/self/mounts "$buildroot/etc/mtab"
