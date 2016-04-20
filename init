@@ -11,6 +11,8 @@ mount -t proc proc /proc -o nosuid,noexec,nodev
 mount -t sysfs sys /sys -o nosuid,noexec,nodev
 mount -t devtmpfs dev /dev -o mode=0755,nosuid
 mount -t tmpfs run /run -o nosuid,nodev,mode=0755
+mkdir -m 0755 /dev/pts
+mount -t devpts -o gid=5,mode=620 devpts /dev/pts
 mkdir -m755 /run/initramfs
 
 # parse the kernel command line
