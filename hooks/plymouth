@@ -1,0 +1,21 @@
+run_earlyhook(){
+        # first trigger graphics subsystem
+        udevadm trigger --action=add --attr-match=class=0x030000 >/dev/null 2>&1
+        # first trigger graphics and tty subsystem
+        udevadm trigger --action=add --subsystem-match=graphics --subsystem-match=drm --subsystem-match=tty >/dev/null 2>&1
+ 
+        udevadm settle --timeout=30 2>&1
+       
+	/usr/bin/mknod /dev/fb c 29 &>/dev/null
+        /sbin/plymouthd --mode=boot --pid-file=/run/plymouth/pid --attach-to-session
+}
+ 
+run_hook() {
+        /bin/plymouth --show-splash
+}
+ 
+run_latehook(){
+        /bin/plymouth update-root-fs --new-root-dir=/new_root      
+}
+
+# vim: set ft=sh:
